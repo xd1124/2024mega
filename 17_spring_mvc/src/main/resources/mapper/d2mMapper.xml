@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.application.mvc.chapter03_mybatis.D2M">
+
+	
+	<!-- 		
+		
+	  	 # DAO to Mapper 데이터 전송 
+
+		- DAO에서 Mybatis에서 파라메타 전송은 1개만 가능하다.
+		  1) 단일 데이터의 경우 단일 데이터 전송
+		  2) 2개 이상의 데이터일 경우 데이터가 DTO안에 포함되면 DTO타입으로 전송
+		  3) 2개 이상의 데이터일 경우 데이터가 DTO안에 포함되지 않으면 Map타입으로 전송
+	  	
+		- DAO에서 전달 받은 데이터는 쿼리문에서 #{변수} 형태로 사용한다.
+		  
+		  1) 단일 데이터 : #{변수명}
+		  2) DTO      	 : #{property}
+		  3) Map	     : #{key} 
+		  
+		- '대소문자가 정확하게 구분' 되므로 오타에 주의한다.
+			DTO는 정확하게 property를 입력
+			Map은 정확하게 key를 입력
+		
+		- parameterType 속성은 생략해도 Mybatis가 파라메타의 타입을 인식하여 쿼리문은 수행하지만 
+		  가독성 향상을 위해 작성하는 것을 권장한다.	
+			
+	-->
+
+	<!-- 단일 데이터 전송예시1 -->
+	<update id="ex01" parameterType="long">
+		UPDATE
+				PRODUCT
+		SET
+				PRICE = PRICE + 1
+		WHERE
+				PRODUCT_ID = #{productId}
+	</update>
+		
+	<!-- 단일 데이터 전송예시2 -->
+	<update id="ex02" parameterType="long">
+		UPDATE
+				PRODUCT
+		SET
+				DELIVERY_PRICE = DELIVERY_PRICE + 1
+		WHERE
+				BRAND_ID = #{brandId}
+	</update>
+	
+
+	<!-- 단일 데이터 전송예시3 -->
+	<select id="ex03" parameterType="String" resultType="BrandDTO">
+		SELECT
+				*
+		FROM	
+				BRAND
+		WHERE
+				BRAND_NM = #{brandNm}
+	</select>
+	
+	<!-- DTO 전송예시1 -->
+	<insert id="ex04" parameterType="BrandDTO">
+		INSERT INTO
+				BRAND
+		VALUES (
+			#{brandId},
+			#{brandNm},
+			NOW(),
+			#{activeYn}
+		)
+	</insert>
+	
+	<!-- DTO 전송예시2 -->
+	<insert id="ex05" parameterType="ProductDTO">
+		INSERT INTO PRODUCT(
+			PRODUCT_NM,
+			PRICE,
+			DELIVERY_PRICE,
+			ENROLL_DT,
+			BRAND_ID	
+		)
+		VALUES (
+			#{productNm},
+			#{price},
+			#{deliveryPrice},
+			NOW(),
+			#{brandId}
+		)
+	</insert>
+	
+	<!-- DTO 전송예시3 -->
+	<select id="ex06" parameterType="ProductDTO" resultType="ProductDTO">
+		SELECT
+				*
+		FROM
+				PRODUCT
+		WHERE
+				PRICE >= #{price} AND DELIVERY_PRICE = #{deliveryPrice}
+	</select>
+	
+	
+	<!-- Map 전송예시1 -->
+	<select id="ex07" parameterType="hashmap" resultType="ProductDTO">
+		SELECT
+				*
+		FROM 
+				PRODUCT
+		WHERE
+				PRICE BETWEEN #{min} AND #{max}
+	</select>
+	
+	<!-- Map 전송예시2 -->
+	<select id="ex08" parameterType="hashmap" resultType="BrandDTO">
+		SELECT
+				*
+		FROM
+				BRAND
+		WHERE
+				ENTERED_DT BETWEEN #{startDate} AND #{endDate}
+	</select>
+	
+	<!-- Map 전송예시3 -->
+	<select id="ex09" parameterType="hashmap" resultType="hashmap">
+		SELECT
+				*
+		FROM
+				PRODUCT P
+				   JOIN BRAND B
+				   	 ON P.BRAND_ID = B.BRAND_ID
+		WHERE
+				P.PRICE > #{price} 	AND B.ACTIVE_YN = #{activeYn}
+	</select>
+
+</mapper>

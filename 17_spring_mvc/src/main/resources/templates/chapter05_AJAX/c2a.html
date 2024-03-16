@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>controllerToAjax</title>
+<script th:src="@{/jquery/jquery-3.6.1.min.js}"></script>
+<script>
+
+	$().ready(function(){
+		
+		// (경우의 수 1) 단일데이터 return
+		$("#btn1").click(function(){
+			
+			/*
+				
+				[형식]
+			
+				파라메타
+				
+			*/
+			
+			$.ajax({
+				url : "/c2a/ex01",
+				type : "get",
+				success : function(data) {
+					
+					console.log("--- single data ---");
+					console.log(data);
+					console.log("");
+					
+					$("#printData").html(data);
+					
+				}
+				
+			});
+			
+			
+			
+		});
+		
+		
+		// (경우의 수 2) DTO return
+		$("#btn2").click(function(){
+			
+			/*
+			
+				[형식]
+
+				파라메타.속성명
+				
+			*/
+			$.ajax({
+				url : "/c2a/ex02",
+				type : "get",
+				success : function(data) {
+					console.log("--- DTO ---");
+					console.log(data.productId);
+					console.log(data.productNm);
+					console.log(data.price);
+					console.log(data.deliveryPrice);
+					console.log(data.enrollDt);
+					console.log(data.brandId);
+					console.log("");
+					
+					let dataView = "<table border='1'>";
+					    dataView += "<tr>";
+					    dataView += "<th>productId</th>";
+					    dataView += "<th>productNm</th>";
+					    dataView += "<th>price</th>";
+					    dataView += "<th>deliveryPrice</th>";
+					    dataView += "<th>enrollDt</th>";
+					    dataView += "<th>brandId</th>";
+					    dataView += "</tr>";
+					    dataView += "<tr>";
+					    dataView += "<td>" + data.productId + "</td>";
+					    dataView += "<td>" + data.productNm + "</td>";
+					    dataView += "<td>" + data.price + "</td>";
+					    dataView += "<td>" + data.deliveryPrice + "</td>";
+					    dataView += "<td>" + data.enrollDt + "</td>";
+					    dataView += "<td>" + data.brandId + "</td>";
+					    dataView += "</tr>";
+					    dataView += "</table>";
+					
+					// `(백틱) 을 사용하여 블록문자열을 생성할 수 있다. 
+					// ${} el표현식으로 데이터를 출력할 수 있다.
+					let dataView2 = `
+						<table border='1'>
+							<tr>
+								<th>productId</th>
+								<th>productNm</th>
+								<th>price</th>
+								<th>deliveryPrice</th>
+								<th>enrollDt</th>
+								<th>brandId</th>
+							</tr>
+							<tr>
+								<td>${data.productId}</td>
+								<td>${data.productNm}</td>
+								<td>${data.price}</td>
+								<td>${data.deliveryPrice}</td>
+								<td>${data.enrollDt}</td>
+								<td>${data.brandId}</td>
+							</tr>
+						</table>
+					`;    
+					    
+					$("#printData").html(dataView2);    
+					    
+					
+				}
+			});
+			
+			
+		});
+		
+		
+		// (경우의 수 3) List<DTO> return
+		$("#btn3").click(function(){
+					
+			/*
+			
+				[형식]	
+			
+				$(파라메타).each(function{
+					this.속성명
+				});
+				
+			*/
+			$.ajax({
+				url : "/c2a/ex03",
+				type : "get",
+				success : function(data) {
+					
+					console.log("--- DTO List ---");
+					$(data).each(function(){
+						console.log(this.productId);
+						console.log(this.productNm);
+						console.log(this.price);
+						console.log(this.deliveryPrice);
+						console.log(this.enrollDt);
+						console.log(this.brandId);
+						console.log("");
+					});
+					console.log("");
+					
+					
+					let viewData = `
+					<table border='1'>
+						<tr>
+							<th>productId</th>
+							<th>productNm</th>
+							<th>price</th>
+							<th>deliveryPrice</th>
+							<th>enrollDt</th>
+							<th>brandId</th>
+						</tr> `
+						$(data).each(function(){
+							viewData += `<tr>
+								<td>${this.productId}</td>
+								<td>${this.productNm}</td>
+								<td>${this.price}</td>
+								<td>${this.deliveryPrice}</td>
+								<td>${this.enrollDt}</td>
+								<td>${this.brandId}</td>
+							</tr>`
+						});
+						viewData += `</table>`;
+					
+					$("#printData").html(viewData);
+					
+				}
+			});
+					
+		});
+		
+		
+		// (경우의 수 4) Map return
+		$("#btn4").click(function(){
+		
+			/*
+			
+				[형식]
+
+				파라메타.키
+				
+			*/
+			
+			$.ajax({
+				url : "/c2a/ex04",
+				type : "get",
+				success : function(data) {
+					console.log("--- map ---");
+					console.log(data.productId);
+					console.log(data.productNm);
+					console.log(data.brandId);
+					console.log(data.price);
+					console.log(data.deliveryPrice);
+					console.log(data.enrollDt);
+					console.log(data.addTax);
+					console.log(data.totalPrice);
+					console.log(data.brandNm);
+					console.log(data.enteredDt);
+					console.log(data.activeYn);
+					console.log("");
+					
+					let viewData = `<table border='1'>
+						<tr>
+							<th>productId</th>
+							<th>productNm</th>
+							<th>price</th>
+							<th>deliveryPrice</th>
+							<th>enrollDt</th>
+							<th>brandId</th>
+							<th>addTax</th>
+							<th>totalPrice</th>
+							<th>brandNm</th>
+							<th>enteredDt</th>
+							<th>activeYn</th>
+						</tr>
+						<tr>
+							<td>${data.productId}</td>
+							<td>${data.productNm}</td>
+							<td>${data.price}</td>
+							<td>${data.deliveryPrice}</td>
+							<td>${data.enrollDt}</td>
+							<td>${data.brandId}</td>
+							<td>${data.addTax}</td>
+							<td>${data.totalPrice}</td>
+							<td>${data.brandNm}</td>
+							<td>${data.enteredDt}</td>
+							<td>${data.activeYn}</td>
+						</tr>`;
+					
+					$("#printData").html(viewData);	
+					
+				}
+			});
+			
+		});
+		
+		
+		// (경우의 수 5) List<Map> return
+		$("#btn5").click(function(){
+			
+			/*
+			
+				[형식]
+			
+				$(파라메타).each(function{
+					this.키
+				});
+			
+			*/
+			
+			$.ajax({
+				url : "/c2a/ex05",
+				type : "get",
+				success : function(data) {
+					
+					console.log("--- map list ---");
+					
+					$(data).each(function(){
+						console.log(this.productId);
+						console.log(this.productNm);
+						console.log(this.brandId);
+						console.log(this.price);
+						console.log(this.deliveryPrice);
+						console.log(this.enrollDt);
+						console.log(this.addTax);
+						console.log(this.totalPrice);
+						console.log(this.brandNm);
+						console.log(this.enteredDt);
+						console.log(this.activeYn);
+						console.log("");	
+					});
+					console.log("");	
+					
+					
+					let viewData = `<table border='1'>
+						<tr>
+							<th>productId</th>
+							<th>productNm</th>
+							<th>price</th>
+							<th>deliveryPrice</th>
+							<th>enrollDt</th>
+							<th>brandId</th>
+							<th>addTax</th>
+							<th>totalPrice</th>
+							<th>brandNm</th>
+							<th>enteredDt</th>
+							<th>activeYn</th>
+						</tr>`;
+					 $(data).each(function(){
+						viewData += `<tr>
+							<td>${this.productId}</td>
+							<td>${this.productNm}</td>
+							<td>${this.price}</td>
+							<td>${this.deliveryPrice}</td>
+							<td>${this.enrollDt}</td>
+							<td>${this.brandId}</td>
+							<td>${this.addTax}</td>
+							<td>${this.totalPrice}</td>
+							<td>${this.brandNm}</td>
+							<td>${this.enteredDt}</td>
+							<td>${this.activeYn}</td>
+						</tr>`;
+					 });
+					 viewData += `</table>`;
+					
+					$("#printData").html(viewData);	
+					
+				}
+			});
+			
+		});
+		
+	});
+</script>
+</head>
+<body>
+
+	<fieldset>
+		<legend>ControllerToAjax</legend>
+	    <input type="button" id="btn1" value="1) 단일데이터" >
+	    <input type="button" id="btn2" value="2) DTO" >
+	    <input type="button" id="btn3" value="3) List(DTO)" >
+	    <input type="button" id="btn4" value="4) map" >
+	    <input type="button" id="btn5" value="5) List(map)" >
+	</fieldset>
+	
+	<fieldset>
+		<div id="printData">
+		
+		</div>
+	</fieldset>
+	
+	
+	
+	
+</body>
+</html>

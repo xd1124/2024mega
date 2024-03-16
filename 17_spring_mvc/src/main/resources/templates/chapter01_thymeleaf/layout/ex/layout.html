@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+
+<!-- 
+
+    # 선언문
+
+	- xmlns:th는 Thymeleaf 템플릿에서 사용될 수 있는 태그와 속성을 정의한다.
+	
+	- xmlns:layout는 Thymeleaf Layout Dialect의 XML 네임스페이스 선언으로 웹 페이지 레이아웃을 구성하기 위한 속성과 태그를 정의한다.
+
+ -->
+
+<html xmlns:th="http://www.thymeleaf.org"  
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+<meta charset="UTF-8">
+
+	<!-- 
+	
+		# title
+		 
+		- 페이지 타이틀을 설정하는 부분 
+		- layout:title-pattern 속성을 사용하여 각 콘텐츠 페이지에서 제공한 타이틀로 $CONTENT_TITLE 부분을 동적으로 대체할 수 있다.
+	
+	 -->
+
+	<title layout:title-pattern="$CONTENT_TITLE">Thymeleaf layout</title>
+	
+<!-- 
+
+	# import
+	
+	- 공통적용을 위한 script , jquery , css , editor 및 웹 리소스 경로를 정의하여  
+	   리소스 관리가 훨씬 간단해지고 리소스의 import를 재사용하여 개발 효율성이 크게 향상된다.
+	
+ -->
+
+<script th:src="@{/script.js}"></script>
+<link th:href="@{/style.css}" rel="stylesheet" type="text/css">
+
+</head>
+<body>
+
+	<!-- 
+	
+		# header , side , footer 
+		
+		- 레이아웃의 공통화면을 의미한다.
+		- 화면의 상단부를 주로 header로 표현한다.
+		- 화면의 사이드를 주로 side , aside , nav , menu 로 표현한다.
+		- 화면의 하단부를 주로 footer로 표현한다.
+		
+	 -->
+
+	<h1>헤더(header) 입니다.</h1>
+	<hr>
+	
+	<h1>사이드(side , aside , nav , menu) 입니다.</h1>
+	<hr>
+	
+	<!-- 
+	
+		# content , body , main , section
+	
+		<div layout:fragment="content"> 부분은 각 콘텐츠 페이지의 실제 내용이 들어갈 자리를 표시한다. 
+		layout:fragment 속성을 사용하여 이 부분이 동적으로 각 콘텐츠 페이지에 의해 교체될 수 있게 한다.
+	
+		layout:fragment="content" 부분에 해당 페이지의 고유 내용을 삽입하여 공통 레이아웃을 재사용할 수 있다.	
+	 
+	 -->
+	
+	<div layout:fragment="content">
+		<p>동적으로 교체될 화면(content , body , main , section) 입니다.</p>		
+	</div>
+	
+	<h1>푸터(footer) 입니다.</h1>
+
+</body>
+</html>

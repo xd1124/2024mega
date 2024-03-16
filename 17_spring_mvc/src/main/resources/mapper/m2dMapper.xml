@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 
+	
+	   * id 속성  : query의 식별자이며 다른 id와 중복없이 고유해야 한다.
+                    DAO의 추상메서드와 id속성을 연결시켜 SQL과 JAVA를 매핑한다.
+                   
+        
+	        	[Mapper]							     [DAO]
+	        
+	         id="getProductList"    	 		getProductList();
+	         id="getProductDetail"    	 		getProductDetail();
+	         id="createProduct"    	 			createProduct();
+	         id="updateProduct"    	 			updateProduct();
+	         id="deleteProduct"    	 			deleteProduct();
+	
+	
+		* parameterType속성 : DAO에서 Mapper으로 전달되는 파라미터의 타입을 명시하며 생략가능하다.
+	
+		* resultType속성 : 
+		
+							1) 반환되는 데이터의 타입을 명시하며 반환 데이터가 있는 select쿼리문에서 사용한다. (int , String , hashmap , map , Map ,  double , path.DTO , path.VO)
+					   	   		path.DTO , path.VO 타입은 application.properteis파일에서 alias(별칭)지정을 하여 간략하게 사용할 수 있다.
+						
+						   		예시) mybatis.type-aliases-package=패키지명
+							
+						  	2) snake to camel매핑 설정도 application.properties파일에서 아래의 설정을 추가하여 사용할 수 있다.
+						  		mybatis.configuration.map-underscore-to-camel-case=true
+							
+		
+		* resultMap속성  : 주로 반환되는 데이터의 컬럼명을 DTO의 필드와 일치시키거나 
+					       map 컬렉션프레임워크의 키로 등록시켜서 SQL과 JAVA가 매핑된다.
+						
+	 -->
+
+
+
+
+<mapper namespace="com.application.mvc.chapter03_mybatis.M2D">
+
+	<!-- DTO List 반환 예시1 -->
+	<select id="ex01" resultType="ProductDTO">
+		SELECT
+				*
+		FROM
+				PRODUCT
+	</select>
+	
+	
+	<!-- DTO List 반환 예시2 -->
+	<select id="ex02" resultType="BrandDTO">
+		SELECT
+				*
+		FROM
+				BRAND
+	</select>
+	
+	
+	
+	
+	<!-- DTO 반환 예시1 -->
+	<select id="ex03" resultType="ProductDTO">
+		SELECT
+				*
+		FROM
+				PRODUCT
+		WHERE
+				PRODUCT_ID = 1
+	</select>
+	
+	
+	<!-- DTO 반환 예시2 -->
+	<select id="ex04" resultType="BrandDTO">
+		SELECT 
+				*
+		FROM
+				BRAND
+		WHERE
+				BRAND_ID = 1
+	</select>
+	
+	
+	
+	<!-- 단일데이터 반환 예시1 -->
+	<select id="ex05" resultType="int">
+		SELECT
+				COUNT(*)
+		FROM
+				PRODUCT
+	</select>
+	
+	<!-- 단일데이터 반환 예시2 -->
+	<select id="ex06" resultType="double">
+		SELECT
+				AVG(PRICE)
+		FROM
+				PRODUCT
+	</select>
+
+
+	<!-- 단일데이터 반환 예시3 -->
+	<select id="ex07" resultType="String">
+		SELECT 
+				PRODUCT_NM
+		FROM
+				PRODUCT
+		WHERE
+				PRODUCT_ID = 1
+	</select>
+	
+	<!--  
+
+	 	- SQL 내부의 특정 연산자가 (ex '>' , '<') 마이바티스 태그와 중첩되기 때문에
+	 	<![CDATA[]]>로 쿼리문을 감싸고 쿼리문을 작성한다.
+	 	     
+	-->
+	
+	<!-- <![CDATA[]]> 사용예시  -->	
+	<select id="ex08" resultType="ProductDTO">
+		<![CDATA[
+			SELECT
+					*
+			FROM
+					PRODUCT
+			WHERE
+					PRICE < 1000000			
+		]]>
+	</select>
+	
+	
+	<!-- 
+	
+		- COLUMN에서 AS키워드를 작성하여 자바 DTO의 property와 바인딩시키거나 맵의 key값으로 지정한다.
+			
+		<select id = "" >
+			SELECT
+				컬럼1  AS DTO의 property 혹은 Map의 key
+				컬럼2  AS DTO의 property 혹은 Map의 key
+				컬럼3  DTO의 property 혹은 Map의 key    		< AS 키워드는 생략가능하다.
+				컬럼4  DTO의 property 혹은 Map의 key   
+			FROM
+				테이블명		
+		</select> 
+	 
+	-->
+	
+	<!-- map 컬렉션 프레임워크 사용 예시 -->
+	<select id="ex09" resultType="hashmap">
+		SELECT
+				PRODUCT_ID  		AS productId,
+				PRICE				AS price,	
+				PRICE * 0.1 		AS tax,
+				PRICE + PRICE * 0.1 AS totalPrice
+		FROM
+				PRODUCT
+	</select>
+		
+	
+	<!--  
+	
+		* resultMap
+		
+		<resultMap id="getProduct" type="000.000.000.Product">  		<< 식별id , DTO클래스 전체 경로
+       		<result property="productCode" column="PRODUCT_CODE"/>		<< 변수값 , 컬럼명
+       		<result property="productName" column="PRODUCT_NAME"/>
+    	</resultMap>
+    	
+    	<select id = ""  resultMap="getProduct">						<< 식별id , resultMap의 id
+    		SELECT
+				PRODUCT_CODE
+				PRODUCT_NAME
+			FROM
+				PRODUCT		
+    	</select>
+
+		> resultMap속성은 resultMap태그의 id와 매핑된다.
+		
+	-->
+	
+	<resultMap type="hashmap" id="a">
+		<result column="PRODUCT_ID" 	property="productId"/>
+		<result column="PRICE"  		property="price"/>
+		<result column="TAX"  			property="tax"/>
+		<result column="TOTAL_PRICE"  	property="totalPrice"/>
+	</resultMap>
+
+	<!-- resultMap 사용 예시1 -->
+	<select id="ex10" resultMap="a">
+		SELECT
+				PRODUCT_ID			 AS PRODUCT_ID,
+				PRICE				 AS PRICE,	
+				PRICE * 0.1			 AS TAX,
+				PRICE + PRICE * 0.1  AS TOTAL_PRICE
+		FROM
+				PRODUCT
+	</select>
+	
+	
+	<resultMap type="hashmap" id="joinMap">
+		<result column="PRODUCT_ID" property="productId"/>
+		<result column="PRODUCT_NM" property="productNm"/>
+		<result column="BRAND_ID"   property="brandId"/>
+		<result column="BRAND_NM"   property="brandNm"/>
+	</resultMap>
+	
+	<!-- resultMap 사용 예시2 -->
+	<select id="ex11" resultMap="joinMap">
+		SELECT
+				P.PRODUCT_ID   AS PRODUCT_ID,
+				P.PRODUCT_NM   AS PRODUCT_NM,
+				B.BRAND_ID     AS BRAND_ID,
+				B.BRAND_NM     AS BRAND_NM
+		FROM
+				PRODUCT P
+				   JOIN BRAND B
+				   	 ON P.BRAND_ID = B.BRAND_ID
+	</select>
+
+
+
+
+</mapper>
+

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>script</title>
+
+<!-- 
+
+	# javascript 
+	
+	- 서버사이드에서 전송된 데이터 타입을 모두 문자열로 처리해야하므로 
+	  JSON 및 배열과 같은 타입으로 변환할 수 없다.
+	  
+	- 서버사이드를 통한 페이지 렌더링시에는 데이터가 표시될 수 있으나 
+	  정적으로 페이지를 렌더링 할 경우 데이터를 표시 할 수 없다.
+	  
+-->
+<script>
+	/*
+	// Data
+	let jsData1 = "[[${string}]]";
+	let jsData2 = "[[${int}]]";
+	let jsData3 = "[[${double}]]";
+	let jsData4 = "[[${boolean}]]";
+	let jsData5 = "[[${date}]]"; 
+	
+	console.log(" - js data - ");
+	console.log(jsData1);
+	console.log(jsData2);
+	console.log(jsData3);
+	console.log(jsData4);
+	console.log(jsData5);
+	console.log("");
+	
+	
+	
+	// DTO & Map
+	let jsDTO = "[[${dto}]]";
+	let jsMap = "[[${map}]]";
+	
+	console.log(" - js DTO & Map - ");
+	console.log(jsDTO);
+	console.log(jsDTO.productId);
+	console.log(jsDTO.productNm);
+	console.log(jsMap);
+	console.log(jsMap.addTax);
+	console.log(jsMap.totalPrice);
+	console.log("");
+	
+	
+	
+	// List
+	let jsDTOList = "[[${dtoList}]]";
+	let jsMapList = "[[${mapList}]]";
+	
+	console.log(" - js List - ");
+	console.log(jsDTOList);
+	console.log(jsDTOList[0].productId);
+	console.log(jsDTOList[0].productNm);
+	console.log(jsMapList);
+	console.log(jsMapList[0].addTax);
+	console.log(jsMapList[0].totalPrice);
+	console.log("");
+	
+	
+	// Session
+	let jsSession1 = "[[${session.var1}]]";
+	let jsSession2 = "[[${session.var2}]]";
+	
+	console.log(" - js session - ");
+	console.log(jsSession1);
+	console.log(jsSession2);
+	console.log("");
+	*/
+	
+</script>
+
+
+<!--  
+
+	# 타임리프 인라인 자바스크립트 (thymeleaf inline javascript)
+	
+		- (네추럴 템플릿) 서버 사이드 렌더링 없이도 템플릿 파일 자체로서 사용 가능한 웹 페이지의 모습을 유지할 수 있다.
+	
+	
+		[사용방법]
+	
+		1) <script th:inline="javascript"> 와 같은 형태로 스크립트 태그를 작성한다.
+		    
+		2) CDATA(Character Data)구역 안에서 스크립트 코드를 작성한다. 
+		
+			/*<![CDATA[*/
+				 	
+				 	code 작성
+				 	
+			/*]]>*/
+			
+		3) 아래와 같은 형태로 서버에서 전송된 데이터를 스크립트에서 사용한다.
+		
+			/*[[${전송된데이터}]]*/정적데이터   
+		
+-->
+
+<script th:inline="javascript"> 
+
+/*<![CDATA[*/
+		
+	// Data
+	//console.log([[${string}]]);   	   // 사용가능
+	//console.log(/*[[${string}]]*/);   // 사용가능
+	
+	let thJsData1 = /*[[${string}]]*/"data1";
+	let thJsData2 = /*[[${int}]]*/1; 
+	let thJsData3 = /*[[${double}]]*/3.14;
+	let thJsData4 = /*[[${boolean}]]*/true;
+	let thJsData5 = /*[[${date}]]*/"2024-01-01";
+	
+	
+	console.log(" - thymeleaf inline js data - ");
+	console.log(thJsData1);
+	console.log(thJsData2);
+	console.log(thJsData3);
+	console.log(thJsData4);
+	console.log(thJsData5);
+	console.log("");
+	
+	
+	// DTO & Map : 타임리프 인라인스크립트를 사용하면 서버에서 전송된 객체나 배열을 JSON으로 변환해준다.
+	let thJsDTO = /*[[${dto}]]*/{"productId" : 999 , "productNm" : "임시상품"};
+	let thJsMap = /*[[${map}]]*/{"addTax" : -1 , "totalPrice" : -1};
+	
+	console.log(" - thymeleaf inline js DTO & Map - ");
+	console.log(thJsDTO);
+	console.log(thJsDTO.productId);
+	console.log(thJsDTO.productNm);
+	console.log(thJsMap);
+	console.log(thJsMap.addTax);
+	console.log(thJsMap.totalPrice);
+	console.log("");
+	
+	
+	// List
+	let thJsDTOList = /*[[${dtoList}]]*/[
+											{"productId" : -111 , "productNm" : "임시상품111"},
+											{"productId" : -222 , "productNm" : "임시상품222"}
+										];
+	let thJsMapList = /*[[${mapList}]]*/[
+											{"addTax" : -111 , "totalPrice" : -1111},
+											{"addTax" : -222 , "totalPrice" : -2222}
+										];
+	
+	console.log(" - thymeleaf js List - ");
+	console.log(thJsDTOList);
+	console.log(thJsDTOList[0].productId);
+	console.log(thJsDTOList[0].productNm);
+	console.log(thJsMapList);
+	console.log(thJsMapList[0].addTax);
+	console.log(thJsMapList[0].totalPrice);
+	console.log("");
+	
+	
+	// Session
+	let thJsSession1 = /*[[${session.var1}]]*/null;
+	let thJsSession2 = /*[[${session.var2}]]*/null;
+	
+	console.log(" - thymeleaf inline js session - ");
+	console.log(thJsSession1);
+	console.log(thJsSession2);
+	console.log("");
+	
+/*]]>*/
+ 
+</script>
+
+
+
+<!-- 
+	
+	
+	# 반복문 each
+	
+	- 인라인 자바스크립트에서 제공되는 반복문을 사용할 수 있다.
+	
+	[ 사용방법 ]
+	
+	1) <script th:inline="javascript"> 사용
+	2) 아래와 같은 문법으로 사용
+	
+		/*<![CDATA[*/
+	
+			[# th:each="변수 : ${배열 & 리스트}"]
+			    [[${변수}]];
+			[/]
+	
+		/*]]>*/	
+
+ -->
+<script th:src="@{/jquery/jquery-3.6.1.min.js}"></script>
+<script th:inline="javascript">
+	
+/*<![CDATA[*/
+
+	console.log("")
+	console.log(" - for - ");
+	
+	/*
+	let temp1;
+	[# th:each="dto : ${dtoList}"]
+		temp1 = [[${dto}]];
+		console.log(temp1);
+	[/]
+	*/
+	
+	console.log("");
+	
+	let temp2;
+	$(/*[[${dtoList}]]*/).each(function(){
+		temp2 = $(this);
+		console.log(temp2);
+	});
+	
+/*]]>*/	
+ 
+</script>
+
+</head>
+<body>
+</body>
+</html>

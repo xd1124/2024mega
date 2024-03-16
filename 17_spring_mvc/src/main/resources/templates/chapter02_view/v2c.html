@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>view to controller</title>
+</head>
+<body>
+
+	<h1>1) @ModelAttribute</h1>
+	<form th:action="@{/v2c/modelAttribute}" method="post"> 
+		<input type="hidden" name="isPC" value="true">
+		<input type="hidden" name="locationId" value="1">
+		<input type="hidden" name="lang" value="kor">
+		<fieldset>
+			<legend>상품등록</legend>
+			<p>상품코드 : <input type="text" name="productId" /></p>
+			<p>상품명   : <input type="text" name="productNm" /></p>
+			<p>가격     : <input type="text" name="price" /></p>
+			<p>배송비   : <input type="text" name="deliveryPrice" /></p>
+			<p>등록날짜 : <input type="date" name="enrollDt" /></p>
+			<p>브랜드 :  
+				<select name="brandId">
+					<option value="1">SAMSUNG</option>
+					<option value="2">LG</option>
+					<option value="3">APPLE</option>
+					<option value="4">LENOVO</option>
+					<option value="5">GIGABYTE</option>
+					<option value="6">HP</option>
+				</select>
+			</p>
+		    <p><input type="submit" value="상품등록" ></p>
+		</fieldset>	
+    </form>
+     
+    <br><hr><br>
+     
+    <h1>2) @RequestParam Map</h1>
+	<form th:action="@{/v2c/map}" method="post"> 
+		<input type="hidden" name="isPC" value="true">
+		<input type="hidden" name="locationId" value="1">
+		<input type="hidden" name="lang" value="kor">
+		<fieldset>
+			<legend>상품등록</legend>
+			<p>상품코드 : <input type="text" name="productId" /></p>
+			<p>상품명   : <input type="text" name="productNm" /></p>
+			<p>가격     : <input type="text" name="price" /></p>
+			<p>배송비   : <input type="text" name="deliveryPrice" /></p>
+			<p>등록날짜 : <input type="date" name="enrollDt" /></p>
+			<p>브랜드 :  
+				<select name="brandId">
+					<option value="1">SAMSUNG</option>
+					<option value="2">LG</option>
+					<option value="3">APPLE</option>
+					<option value="4">LENOVO</option>
+					<option value="5">GIGABYTE</option>
+					<option value="6">HP</option>
+				</select>
+			</p>
+		    <p><input type="submit" value="상품등록" ></p>
+		</fieldset>	
+    </form>
+     
+	<br><hr><br>
+     
+    <h1>3) HttpServletRequest</h1>
+	<p><a href="/v2c/httpServletRequest?titleId=111111&tab=sun&no=300">HttpServletRequest</a></p>
+	<p><a th:href="@{/v2c/httpServletRequest(titleId=111111 , tab=sun , no=300)}">HttpServletRequest</a></p>
+     
+	<br><hr><br>
+     
+    <h1>4) @RequestParam</h1>
+	<p><a href="/v2c/requestParam?titleId=111111&tab=sun&no=300">@RequestParam</a></p>
+	<p><a th:href="@{/v2c/requestParam(titleId=111111 , tab=sun , no=300)}">@RequestParam</a></p>
+     
+	<br><hr><br>
+	
+    <h1>5) @PathVariable</h1>
+	<p><a href="/v2c/pathVariable/1111111/sun/300">@PathVariable</a></p>
+	<p><a th:href="@{/v2c/pathVariable/{titleId}/{tab}/{no}(titleId=1111111 , tab=sun , no=300)}">@PathVariable</a></p>
+
+</body>
+</html>

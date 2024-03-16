@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>ajaxToController</title>
+<script th:src="@{/jquery/jquery-3.6.1.min.js}"></script>
+<script>
+
+	$().ready(function(){
+
+		// 1. 단일 데이터 전송
+		$("#btn1").click(function(){
+			
+			
+			let param = {"productId" : "1234"}
+			
+			$.ajax({
+				
+				url : "/a2c/ex01",
+				type : "post",
+				//contentType : "application/x-www-form-urlencoded; charset=utf-8",
+				data : param,
+				
+			});
+			
+		});
+		
+		
+		
+		
+		// 2. DTO 전송
+		$("#btn2").click(function(){
+			
+			// JSON 데이터의 키와 자바객체의 필드가 일치된 구조로 전송해야 한다.
+			let param = {
+				"productId" : 1,
+				"productNm" : "기계식키보드",
+				"price" : 45000,
+				"deliveryPrice" : 2500,
+				"enrollDt" : "2023-01-01",
+				"brandId" : 1
+			};
+			
+			$.ajax({
+				
+				url : "/a2c/ex02",
+				type : "post",
+				contentType : "application/json", // JSON 타입으로 데이터를 서버로 전송한다.
+				data : JSON.stringify(param)      // JSON.stringify(JSON); 함수를 사용하여 문자열로 직렬화하여 데이터를 서버로 전송한다.	
+				
+			});
+			
+		});
+		
+		
+		// 3. List<DTO> 전송
+		$("#btn3").click(function(){
+			
+			let productList = []; // javascript 배열생성
+			for (let i = 1; i < 11; i++) {
+				// JSON 데이터의 키와 자바객체의 필드가 일치된 구조로 전송해야 한다.
+				let param = {
+					"productId" : i,
+					"productNm" : "무소음마우스" + i,
+					"price" : 10000 * i,
+					"deliveryPrice" : i,
+					"enrollDt" : "2023-01-01",
+					"brandId" : i
+				}
+				productList.push(param);  // 배열.push(데이터); 함수를 사용하여 데이터를 배열에 추가
+			}
+			
+			
+			
+			$.ajax({
+				
+				url : "/a2c/ex03",
+				type : "post",
+				contentType : "application/json",
+				data : JSON.stringify(productList)
+				
+			});
+			
+		});
+		
+		// 4. map 전송
+		$("#btn4").click(function(){
+			
+			let param = {
+				"orderId" : "order1",
+				"orderQty" : 2,
+				"cartId" : "cart3",
+				"cartQty" : 4
+			};
+			
+			$.ajax({
+				
+				url : "/a2c/ex04",
+				type : "post",
+				contentType : "application/json",
+				data : JSON.stringify(param)
+				
+			});
+					
+		});
+	
+		
+		
+		
+		// 5. List<Map> 전송
+		$("#btn5").click(function(){
+			
+			let mapList = []; // javascript 배열생성
+			for (let i = 1; i < 11; i++) {
+				let param = {
+						"orderId" : "order" + i,
+						"orderQty" : i,
+						"cartId" : "cart" + i,
+						"cartQty" : i
+					};
+				mapList.push(param);  // 배열.push(데이터); 함수를 사용하여 데이터를 배열에 추가
+			}
+			
+			$.ajax({
+				
+				url : "/a2c/ex05",
+				type : "post",
+				contentType : "application/json",
+				data : JSON.stringify(mapList)
+				
+			});
+			
+		});
+		
+	});
+</script>
+</head>
+<body>
+
+	<fieldset>
+		<legend>AjaxToController</legend>
+	    <input type="button" id="btn1" value="1) 단일데이터" >
+	    <input type="button" id="btn2" value="2) DTO" >
+	    <input type="button" id="btn3" value="3) List(DTO)" >
+	    <input type="button" id="btn4" value="4) map" >
+	    <input type="button" id="btn5" value="5) List(map)" >
+	</fieldset>
+</body>
+</html>

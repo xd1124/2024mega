@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.application.mvc.chapter04_dynamicQuery.DynamicQueryDAO">
+
+	
+	<!--  
+		
+		# 동적 SQL
+
+		- Mapper에서 SQL을 동적(if , foreach)으로 제어할 수 있다.
+		
+		- 동적 SQL은 JSTL과 구문이 비슷하다.
+		
+			예시)
+				       			[ JSTL ] 			  [ MyBatis ] 
+			표현식 		:    	${}				/	     #{}
+			if    		:  		<c:if>			/		 <if>
+			choose		:  		<c:choose>  	/	   <choose>
+			when		: 		<c:when>	 	/ 		 <when>
+			otherwise 	: 		<c:otherwise> 	/ 	   <otherwise>		
+			foreach		:		<c:forEach>		/	 	<foreach>
+		
+		- DAO에서 전송된 단일 데이터 , POJO의 필드 , map프레임워크의 key값을 조건절 속성에 표현식 없이 그대로 사용한다.
+			
+			예시)
+			
+			<if test='productCode != null'>        : O
+			<if test='#{productCode != null}'>     : X
+			<if test='${productCode != null}'>     : X
+			
+			<if test='onePageViewCount != 0'>      : O  
+			<if test='#{onePageViewCount != 0}'>   : X 
+			<if test='${onePageViewCount != 0}'>   : X  
+		
+		
+		- 태그 속성구문에서 '' , "" 모두 사용 가능하다. 
+		  	
+			예시) 
+				<when test = '조건식'>
+				<when test = "조건식" >
+		
+		
+		- 조건절에서 && , || 연산자 대신에 and , or 키워드를 사용해야 한다.
+		 
+	-->
+		
+
+	<!-- [ if ] 사용예시 -->
+	<select id="ifEx" parameterType="hashmap" resultType="ProductDTO">
+		SELECT
+				*
+		FROM
+				PRODUCT
+		WHERE
+				<if test="searchKeyword == 'enrollDt'">
+					ENROLL_DT LIKE CONCAT('%', #{searchWord} , '%')
+				</if>
+				<if test='searchKeyword == "productNm"'>
+					PRODUCT_NM LIKE CONCAT('%', #{searchWord} , '%')
+				</if>
+	</select>
+	
+	
+	
+	<!-- [ when ] 사용예시 -->
+	<select id="whenEx" parameterType="hashmap" resultType="ProductDTO">
+		SELECT
+				*
+		FROM
+				PRODUCT
+		WHERE
+				<choose>
+					<when test="searchKeyword.equals('enrollDt')">
+						ENROLL_DT LIKE CONCAT('%', #{searchWord} , '%')
+					</when>
+					<when test='searchKeyword.equals("productNm")'>
+						PRODUCT_NM LIKE CONCAT('%', #{searchWord} , '%')
+					</when>
+				</choose>
+	</select>
+	
+	<!-- [ otherwise ] 사용예시 -->
+	<select id="otherwiseEx" parameterType="int" resultType="ProductDTO">
+		SELECT
+				*
+		FROM
+				PRODUCT
+		WHERE
+				<choose>
+					<when test="deliveryPrice == 0">
+						DELIVERY_PRICE = 0
+					</when>
+					<otherwise>
+						DELIVERY_PRICE != 0
+					</otherwise>
+				</choose>	
+	</select>	
+
+
+	<!-- 
+	
+		# foreach
+	
+		- foreach 태그를 사용하여 SQL에 반복구문을 적용할 수 있다.
+		
+			[ foreach 속성 ]
+		    
+		    1) collection="반복객체"  > DAO에서 전달받은 반복이 가능한 객체 지정(list , array)
+		    2) item="변수"		      > 반복문에서 사용되어지는 변수 이름 지정
+		    3) separator="구분자"     > 반복 되는 쿼리문 사이에 구분자 문자열을 지정
+		    4) index="인덱스"         > 인덱스 값을 지정할때 사용할 변수 이름 지정(0부터 순차적으로 증가)
+		    5) open="시작문자열"      > 최종 반환값의 접두어 지정  (IN(값, 값, ...) 조건을 만들 때 편리)
+		    6) close="종료문자열"	  > 최종 반환값의 접미어 지정
+			
+	-->
+	
+	<!-- [ foreach ] insert 사용예시  -->
+	<insert id="foreachEx01" >
+		INSERT INTO
+				BRAND
+		VALUES
+				<foreach item="내마음" collection="list" separator=",">
+					(#{내마음.brandId} , #{내마음.brandNm} , #{내마음.enteredDt} , #{내마음.activeYn})
+				</foreach>
+	</insert>
+	
+	
+	<!-- [ foreach ] select 사용예시  -->
+	<select id="foreachEx02" resultType="BrandDTO">
+		SELECT
+				*
+		FROM
+				BRAND
+		WHERE	
+				BRAND_ID IN <foreach item="임시변수" collection="array" open="("  separator="," close=")">
+								#{임시변수}
+							</foreach>
+	</select>
+	
+	
+	<!-- [ foreach ] delete 사용예시 -->
+	<delete id="foreachEx03" >
+		DELETE FROM
+				BRAND
+		WHERE
+				BRAND_ID IN <foreach item="brandId" collection="array" open="(" separator="," close=")">
+								#{brandId}
+							</foreach>
+	</delete>
+	
+	
+	<!-- [ foreach ] update 사용예시1 -->
+	<update id="foreachEx04"> 
+		UPDATE
+				PRODUCT
+		SET
+				PRICE = PRICE + 1
+		WHERE	
+				PRODUCT_ID IN <foreach item="productId" collection="array" open="(" separator="," close=")">
+							  	#{productId}
+							  </foreach>	
+	</update>
+	
+	<!-- [ foreach ] update 사용예시2 -->
+	<!-- update 쿼리를 전체 반복할 경우 데이터베이스 컨넥션 url에 allowMultiQueries=true옵션을 추가하여 사용한다. -->
+	<update id="foreachEx05">
+	
+		<foreach item="map" collection="list" separator=";">
+			UPDATE
+					PRODUCT
+			SET
+					PRICE = PRICE + #{map.addPrice}
+			WHERE
+					PRODUCT_ID = #{map.productId}
+		</foreach>
+	
+	</update>
+	
+	
+	
+	
+	<!-- 
+	
+		# <where>
+		
+		- <where>태그는 단독으로 사용되지 않고<if>, <choose>와 같은 태그들을 내포하여 SQL들을 연결하여 준다.
+		- 앞 뒤에 필요한 구문들(AND, OR)을 생략하는 역할을 한다.
+	
+	 -->
+	 
+	<!-- [ where ] 사용예시 --> 
+	<select id="whereEx" parameterType="ProductDTO" resultType="ProductDTO">
+		SELECT
+				*
+		FROM
+				PRODUCT
+		<where>
+				<if test="productNm != '' and productNm != null">
+					PRODUCT_NM LIKE CONCAT('%' , #{productNm}, '%')
+				</if>
+				<if test="brandId != 0">
+					AND BRAND_ID = #{brandId}
+				</if>
+		</where>
+		
+	</select>
+	
+	
+	<!-- 
+	
+		# <set>
+		
+		- <set>태그는 단독으로 사용되지 않고 <if>, <choose>와 같은 태그들을 내포하여 SQL들을 연결하여 준다.
+		- SQL앞 뒤에 적용되지 않는 구문(,)을 생략하여 준다.
+	
+	 -->
+	
+	<!-- [ set ] 사용예시 --> 
+	<update id="setEx" parameterType="ProductDTO">
+		UPDATE
+				PRODUCT
+		<set>
+				<if test="price != 0">
+					PRICE = PRICE + #{price} , 
+				</if>
+				<if test="deliveryPrice != 0">
+					DELIVERY_PRICE = DELIVERY_PRICE + #{deliveryPrice}
+				</if>
+		</set>
+		WHERE
+				PRODUCT_ID = 1
+	</update>
+
+
+
+
+
+
+</mapper>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.application.mvc.chapter06_RESTAPI.BrandDAO">
+	
+	<select id="getBrandList" resultType="BrandDTO">
+		SELECT 
+				*
+		FROM
+				BRAND
+	</select>
+	
+	<select id="getBrandDetail" parameterType="long" resultType="BrandDTO">
+		SELECT 
+				*
+		FROM
+				BRAND
+		WHERE
+				BRAND_ID = #{brandId}
+	</select>
+	
+	<insert id="createBrand" parameterType="BrandDTO">
+		INSERT INTO
+				BRAND
+		VALUES(
+			#{brandId},
+			#{brandNm},
+			#{enteredDt},
+			#{activeYn}
+		)
+	</insert>
+	
+	<update id="updateBrand" parameterType="BrandDTO">
+		UPDATE
+				BRAND
+		SET
+				BRAND_NM = #{brandNm},
+				ENTERED_DT = #{enteredDt},
+				ACTIVE_YN = #{activeYn}
+		WHERE
+				BRAND_ID = #{brandId}
+	</update>
+	
+	<delete id="deleteBrand" parameterType="long">
+		DELETE FROM
+				BRAND
+		WHERE
+				BRAND_ID = #{brandId}
+	</delete>
+		
+</mapper> 

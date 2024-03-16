@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+
+<!-- 
+
+	- layout:decorate 속성은 현재 템플릿이 지정된 외부 레이아웃 파일(layout.html)로 "장식" 또는 "데코레이션"될 것임을 나타낸다. 
+	
+	- 현재 페이지의 콘텐츠는 레이아웃 템플릿에 정의된 구조 내에 삽입되어 사용되어진다.
+	
+	- ~{...} 구문은 Thymeleaf의 표준 표현식 중 하나로 리소스의 위치를 나타내며 해당 경로에 위치한 레이아웃 파일을 참조하고 있다. 
+	   이 경로는 프로젝트의 구조에 따라 달라질 수 있으며 일반적으로 src/main/resources/templates 디렉토리 안에 위치한 파일을 참조한다.
+
+ -->
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+      layout:decorate="~{/chapter01_thymeleaf/layout/ex/layout.html}">
+<head>
+<meta charset="UTF-8">
+<title>게시글 추가</title>
+</head>
+<body>
+
+<!-- 
+	
+	layout:fragment="content" 부분에 해당 페이지의 고유 내용을 삽입하여 공통 레이아웃을 재사용할 수 있다.	
+
+ -->
+
+<div layout:fragment="content">
+
+	<div align="center">
+		<h3>게시글 작성하기</h3>
+		<table border="1" style="width:600px;" >
+			<colgroup>
+				<col width="20%">
+				<col width="80%">
+			</colgroup>
+			<tr>
+				<td align="center">작성자</td>
+				<td><input type="text" id="writer" name="writer" size="70"/></td>
+			</tr>
+			<tr >
+				<td align="center">제목</td>
+				<td><input type="text" id="subject" name="subject" size="70"/></td>
+			</tr>
+			<tr>
+				<td align="center">이메일</td>
+				<td><input type="email" id="email" name="email" size="70"/></td>
+			</tr>
+			<tr>
+				<td align="center">비밀번호</td>
+				<td><input type="password" id="password" name="password" size="70"/></td>
+			</tr>
+			<tr>
+				<td align="center">글내용</td>
+				<td><textarea  rows="10" cols="50" id="content" name="content" ></textarea></td>
+			</tr>
+			<tr align="center">
+				<td colspan="2">
+					<input type="submit" value="작성하기" />
+					<input type="reset"  value="다시작성" />
+				</td>
+			</tr>
+		</table>
+	</div>
+	
+</div>
+
+
+</body>
+</html>

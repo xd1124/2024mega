@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>control statement</title>
+</head>
+<body>
+
+	<!-- 
+		
+		# 조건문
+		
+		- 타임리프(Thymeleaf)에서 조건문은 주로 th:if, th:unless, th:switch, th:case 속성을 사용하여 구현한다. 
+
+		1) th:if
+		 		
+			 th:if 속성은 지정된 조건이 true일 때 태그를 렌더링한다.
+			
+		2) th:if와 th:unless	
+			 th:if 속성은 지정된 조건이 true일 때 태그를 렌더링한다.
+			 반대로 th:unless 속성은 조건이 false일 때 태그를 렌더링한다.
+	
+		3) th:switch와 th:case
+			 th:switch와 th:case 속성은 여러 조건 중 하나를 선택해야 할 때 유용하다.
+			 th:switch의 조건과 일치하는 th:case 태그를 렌더링 한다.
+
+	 -->
+
+	<h1>if</h1>
+	<div th:if="${string == '글자 데이터'}">
+		<p>글자 데이터 입니다</p>
+	</div>
+	
+	<div th:if="${map.productNm =='노트북1' && map.brandNm == '브랜드1'}">
+		<p>노트북1 , 브랜드1 입니다.</p>
+	</div>
+	<hr>
+	
+	<h1>if unless</h1>
+	<div th:if="${dto.deliveryPrice == 0}">
+		<p>배송비 무료</p>
+	</div>
+	<div th:unless="${dto.deliveryPrice == 0}">
+		<p th:text="|배송비 : ${dto.deliveryPrice}원|"></p>
+	</div>
+	
+	<hr>
+	
+	<h1>switch</h1>
+	<div th:switch="${dto.productId}"> 
+		<p th:case="1">노트북1 입니다.</p>
+		<p th:case="2">노트북2 입니다.</p>
+		<p th:case="3">노트북3 입니다.</p>
+	</div>
+    <hr>
+    
+    
+    <!-- 
+	
+		# 반복문
+	
+		- 타임리프(Thymeleaf)에서 반복문은 주로 th:each 속성을 사용하여 구현한다. 
+		
+		- 리스트, 배열, 맵 등 다양한 종류의 컬렉션에 대해 동작한다.
+		
+		- 타임리프의 th:each 속성을 사용하면 서버 사이드에서 생성된 데이터 컬렉션을 효율적으로 웹 페이지에 표시할 수 있다.
+		
+	 -->
+
+
+	<!-- 
+		
+		# 단순 반복 > #numbers 객체
+		
+			[ 형식 ]
+			${#numbers.sequence(from , to)}
+			${#numbers.sequence(from , to , step)}
+			
+			예시) 
+			th:each="변수 : ${numbers.sequence(1,100)}"        > 1부터 100까지 반복	
+			th:each="변수 : ${numbers.sequence(100,1)}"    	   > 100부터 1까지 반복
+			th:each="변수 : ${numbers.sequence(1900,2024,10)}" > 1900부터 2024까지 10씩 증가하며 반복
+		
+	 -->
+	 
+    <h1>단순 반복</h1>
+    <span th:each=" year : ${#numbers.sequence(2024,1900)}">
+    	<span th:text="${year}"></span>&nbsp;
+    </span>
+    <br><br>
+    
+    <span th:each="var : ${#numbers.sequence(100,2024,100)}">
+    	<span th:text="${var}"></span>&nbsp;
+    </span>
+    
+    <hr>
+    
+    <!-- 
+		
+		# 객체 반복 > th:each
+		
+			[ 형식 ]
+			th:each="변수 : ${반복가능자료형(어레이,리스트,등)}"
+			
+			예시) 
+			th:each="변수 : ${boardList}"   > controller에서 전송된 boardList의 개수만큼 반복	
+			th:each="변수 : ${productList}" > controller에서 전송된 productList의 개수만큼 반복
+			th:each="변수 : ${orderList}"   > controller에서 전송된 orderList의 개수만큼 반복
+		
+	 -->
+    
+	<h1>반복문(DTO List)</h1>
+	<table border="1">
+		<tr>
+			<th>상품ID</th>
+			<th>상품이름</th>
+			<th>가격</th>
+			<th>배송비</th>
+			<th>등록일자</th>
+			<th>브랜드ID</th>
+		</tr>
+		<tr th:each="dto : ${dtoList}">
+			<td th:text="${dto.productId}"></td>
+			<td th:text="${dto.productNm}"></td>
+			<td th:text="${dto.price}"></td>
+			<td th:text="${dto.deliveryPrice}"></td>
+			<td th:text="${dto.enrollDt}"></td>
+			<td th:text="${dto.brandId}"></td>
+		</tr>		
+	</table>
+
+	<h1>반복문(Map List)</h1>
+	<table border="1">
+		<tr>
+			<th>상품ID</th>
+			<th>상품이름</th>
+			<th>브랜드ID</th>
+			<th>가격</th>
+			<th>배송비</th>
+			<th>등록일자</th>
+			<th>부가세</th>
+			<th>최종금액</th>
+			<th>브랜드명</th>
+			<th>입점일자</th>
+			<th>활성화여부</th>
+		</tr>
+		<tr th:each="map : ${mapList}">
+			<td th:text="${map.productId}"></td>
+			<td th:text="${map.productNm}"></td>
+			<td th:text="${map.brandId}"></td>
+			<td th:text="${map.price}"></td>
+			<td th:text="${map.deliveryPrice}"></td>
+			<td th:text="${map.enrollDt}"></td>
+			<td th:text="${map.addTax}"></td>
+			<td th:text="${map.totalPrice}"></td>
+			<td th:text="${map.brandNm}"></td>
+			<td th:text="${map.totalPrice}"></td>
+			<td th:text="${map.enteredDt}"></td>
+			<td th:text="${map.activeYn}"></td>
+		</tr>
+	</table>
+	<hr>
+	
+	<!-- 
+		
+		# status
+		
+		- 반복문 내에서 현재 반복의 상태에 대한 다양한 정보를 제공한다.
+		  그러므로 반복문의 현재 상태에 대한 추가적인 제어와 정보 접근이 가능하다. 
+		
+		- thymeleaf status는 반복대상 변수명 + "Stat" 변수명으로 접근 할 수 있다.
+		
+			[ 속성 ]
+			
+			current	: 현재 엘리먼트
+			index	: 현재 반복 인덱스  (0부터 시작)		
+			count	: 현재 반복 인덱스  (1부터 시작)	
+			size	: 모든 엘리먼트의 개수
+			first	: 현재 반복이 첫번째인지 여부 (boolean) 
+			last	: 현재 반복이 마지막인지 여부 (boolean)
+			odd	    : 현재 반복이 홀수인지 여부 (boolean)
+			even	: 현재 반복이 짝수인지 여부 (boolean) 
+		
+	 -->
+	
+	<h1>반복문 + status</h1>
+	<table border="1">
+		<tr>
+			<th>현재 엘리먼트</th>
+			<th>현재 인덱스</th>
+			<th>현재 카운트</th>
+			<th>총 엘리먼트의 개수</th>
+			<th>첫번째 반복 여부</th>
+			<th>마지막 반복 여부</th>
+			<th>홀수 여부</th>
+			<th>짝수 여부</th>
+		</tr>
+		<tr th:each="dto : ${dtoList}">
+			<td th:text="${dtoStat.current}"></td>
+			<td th:text="${dtoStat.index}"></td>
+			<td th:text="${dtoStat.count}"></td>
+			<td th:text="${dtoStat.size}"></td>
+			<td th:text="${dtoStat.first}"></td>
+			<td th:text="${dtoStat.last}"></td>
+			<td th:text="${dtoStat.odd}"></td>
+			<td th:text="${dtoStat.even}"></td>
+		</tr>
+		
+	</table>
+
+</body>
+</html>

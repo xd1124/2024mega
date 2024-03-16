@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>var expression</title>
+</head>
+<body>
+
+	<!--  
+	
+		${...}: 변수 표현식(Variable Expressions)
+		
+		- ${...} 표현식은 주로 컨트롤러에서 전달한 데이터를 HTML 페이지에 동적으로 표시할 때 사용된다.
+		
+		- ${dto.field} 형태로 DTO타입의 데이터를 출력할 수 있고
+		  ${map.key}형태로 map타입의 데이터를 출력할 수 있다.
+		
+	-->
+	
+	<h1>데이터 출력</h1>
+	<p th:text="${string}"></p>
+	<p th:text="${int}"></p>
+	<p th:text="${double}"></p>
+	<p th:text="${boolean}"></p>
+	<p th:text="${date}"></p>
+	<p th:text="${dto}"></p>
+	<p th:text="${dtoList}"></p>
+	<p th:text="${map}"></p>
+	<p th:text="${mapList}"></p>
+	<hr>
+	
+	<!-- html 태그사이 엘리먼트에 [[${속성}]]표현식으로  데이터 출력 -->
+	<h1>데이터 출력2</h1> 
+	<p>[[${string}]]</p>
+	<p>[[${int}]]</p>
+	<p>[[${double}]]</p>
+	<p>[[${boolean}]]</p>
+	<p>[[${date}]]</p>
+	<p>[[${dto}]]</p>
+	<p>[[${dtoList}]]</p>
+	<p>[[${map}]]</p>
+	<p>[[${mapList}]]</p>
+	<hr>
+	
+	
+	
+	<h1>출력 우선순위</h1>
+	<p th:text="${string}">html에 정적으로 작성된 데이터 입니다.</p>
+	<p th:text="${int}">html에 정적으로 작성된 데이터 입니다.</p>
+	<p>html에 정적으로 작성된 데이터 입니다.</p>
+	<hr>
+	
+	
+	<h1>복수의 데이터 출력</h1>
+	<p> | 를 사용하여 문자열을 조합할 수 있다.</p>
+	<!-- 문자열 조합예시 -->
+	<p th:text="|글자 데이터 입니다 : ${string}|"></p>
+	<!-- 복수의 데이터 출력 예시 (dto) --> 
+	<p th:text="|${dto.productId} , ${dto.productNm} , ${dto.price}|"></p>
+	
+	<!-- 복수의 데이터 출력 예시 (map) -->				
+	<p th:text="|${map.productNm} , ${map.addTax} , ${map.brandNm}|"></p>
+	<hr>
+
+	<!--
+	 
+	    # utext , [(${속성})]
+	 
+		- 타임리프에서 utext (unescaped text)는 HTML을 이스케이프 처리하지 않고 원시 HTML 코드로 출력할 때 사용하는 속성이다. 
+		
+		- 기본적으로 타임리프는 모든 변수 값을 HTML 이스케이프 처리하여 XSS(Cross-Site Scripting) 공격을 방지한다. 
+		  즉 문자열에 포함된 HTML 태그가 브라우저에 의해 해석되지 않고 그대로 표시된다. 
+		
+		- 하지만 때때로 안전하게 관리되는 HTML 콘텐츠를 페이지에 직접 삽입해야 할 필요가 있다. 
+		   이 때 utext 속성 [[${속성}]] 표현식을 사용한다. 
+		
+	-->
+	<h1>unescaped text </h1>
+	<p th:text="${escape1}"></p>
+	<p th:text="${escape2}"></p>
+	<p>[[${escape1}]]</p>
+	<p>[[${escape2}]]</p>
+	<br>
+	
+	<p th:utext="${escape1}"></p>
+	<p th:utext="${escape2}"></p>
+	<p>[(${escape1})]</p>
+	<p>[(${escape2})]</p>
+	<br>
+	
+	
+	<hr>
+	
+	<!--
+	 
+		Thymeleaf에서 세션 데이터에 접근하려면 ${session} 객체를 사용한다. 
+		${session.속성명} 형태로 세션에 저장된 데이터를 뷰에서 접근한다.
+		
+	 -->
+	 
+	<h1>session</h1>
+	<p th:text="${session.var1}"></p>
+	<p th:text="${session.var2}"></p>
+	<p>[[${session.var1}]]</p>
+	<p>[[${session.var2}]]</p>
+	
+</body>
+</html>
+
+
+
+
+

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>format</title>
+</head>
+<body>
+
+	<!-- 
+		
+		- 타임리프(Thymeleaf)는 날짜와 숫자를 형식화(formatting)하여 표시하는 기능을 제공한다.
+		
+		- #dates와 #numbers 유틸리티 객체를 사용하여 이러한 기능을 구현한다.
+		
+	 -->
+
+
+	<!-- 
+	
+		- 날짜포맷을 구현하기 위해 #dates 유틸리티 객체의 메소드들을 사용할 수 있다. 
+		- format 메소드를 사용하여 날짜 객체를 원하는 형식의 문자열로 변환할 수 있다.
+		
+		[형식]
+		
+		${#dates.format(데이터, 형식)}        
+		
+		(형식)
+		- 세부적인 내용은 검색후 적용
+		
+		연도 : yyyy
+		월   : MM
+		일   : dd
+		시   : HH
+		분   : mm
+		초   : ss
+		
+	 -->
+	<h1>날짜 포맷</h1>
+	<p th:text="${#dates.format(date , 'yyyy-MM-dd hh:mm:ss')}"></p>
+	<p th:text="${#dates.format(dto.enrollDt , 'yyyy년MM월dd일')}"></p>
+	<hr>
+	
+	
+	
+	<!--
+	  
+	  	- 숫자포맷을 구현하기 위해 #numbers 유틸리티 객체의 메소드들을 사용할 수 있다.
+	  	- 이를 통해 숫자를 통화, 백분율, 소수점 형식 등으로 표시할 수 있습니다.
+		- formatInteger 메소드를 사용하여 구현한다.
+	  
+	    [ 형식 ] 
+	    
+		${﻿#numbers.formatInteger(데이터, 표시 자리수)}
+		${﻿#numbers.formatInteger(데이터, 표시 자리수, 구분자)}
+		
+		(참고)
+		구분자 : 세자리마다 사이에 표시되는 구분자로서 'COMMA', 'POINT', 'WHITESPACE', 'NONE', 'DEFAULT' 이며
+		          Default는 Comma이다.
+		
+	-->
+	
+	<h1>숫자 포맷</h1>
+	<p th:text="${#numbers.formatInteger(int , 1 , 'COMMA')}"></p>
+	<p th:text="${#numbers.formatInteger(dto.price , 1 , 'COMMA')}"></p>
+	<hr>
+	
+	
+	<!-- 
+	
+		- 소수점 제어는 formatDecimal를 사용하여 구현한다.
+		
+		[ 형식 ]
+		${#numbers.formatDecimal(데이터 , 표시자리수, 구분자 , 소수점표시자리수 , 'POINT')}
+	
+	 -->
+	 
+	<h1>숫자 포맷(소수점 제어)</h1>
+	<p th:text="${#numbers.formatDecimal(double , 1 , 'COMMA' , 1 , 'POINT')}"></p>
+
+</body>
+</html>

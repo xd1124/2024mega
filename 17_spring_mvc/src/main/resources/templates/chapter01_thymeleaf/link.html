@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" > <!-- 
+												html태그에 thymeleaf속석을 적용하여 사용한다. 
+												xmlns:th="http://www.thymeleaf.org" 
+											-->
+<head>
+<meta charset="UTF-8">
+<title>link</title>
+<link th:href="@{/style.css}" rel="stylesheet">
+<script th:src="@{/script.js}"></script>
+<script th:src="@{/jquery/jquery-3.6.1.min.js}"></script>
+<script>
+	$(function(){
+		console.log("jquery import success");
+	});
+</script>
+</head>
+<body>
+
+	<!--  
+		
+		- 타임리프의 URL 처리 기능은 @{...} 구문을 사용하여 표현된다.
+		 
+		- 이 구문은 타임리프가 실행되는 서버의 컨텍스트를 자동으로 고려하여 절대 경로를 생성한다. 
+		
+	-->
+
+	<h1>1. 기본 URL 링크</h1>
+	<!--  웹 페이지에서 다른 페이지로의 링크를 생성할 때 사용하며 @{경로} 형태로 작성한다. -->
+	<p><a th:href="@{https://www.naver.com}">네이버로 이동하기</a></p>
+	<p><a th:href="@{/basic/main}">메인화면으로 이동하기</a></p>
+	<hr>
+	
+	
+	
+	<h1>2. URL에 파라메타 추가</h1>
+	<!--  
+		파라미터를 URL에 추가할 수 있으며 (파라메타명=데이터) 형태로 작성한다.
+		복수의 파라메타를 전송할경우 , 를 사용하여 (param1=value1 , param2=value2 , param3=value3) 형태로 작성한다.  
+	-->
+	<p><a th:href="@{/board/detail(boardId=100000)}">상세정보확인</a></p>
+	<p><a th:href="@{/webtoon/detail(titleId=1111111 , tab=sun , no=300)}">상세정보확인</a></p>
+	<hr>
+
+
+
+	<h1>3. 경로 변수(Path Variable)</h1>
+	<!--  
+		경로 변수(path variable)를 사용하여 RESTful URL을 생성할 수 있으며 {파라메타명}(파라메타명=데이터) 형태로 작성한다.
+		복수의 파라메타를 전송할경우 아래와 같은 형태로 작성한다.
+		/location/{param1}/{param2}/{param3}(param1=value1 , param2=value2 , param3=value3) 
+	-->
+	<p><a th:href="@{/board/detail/{boardId}(boardId=100000)}">상세정보확인</a></p>
+	<p><a th:href="@{/webtoon/detail/{titleId}/{tab}/{no}(titleId=1111111 , tab=sun , no=300)}">상세정보확인</a></p>
+	<hr>
+	
+	
+	
+	<h1>4. 정적 자원</h1>
+	<!-- static 디렉터리를 기준으로 @{/경로}형태로 작성한다. -->
+	<hr>
+	
+	
+	
+	<h1>5. 이미지</h1>
+	<!-- static 디렉터리를 기준으로 @{/경로}형태로 작성한다. -->
+	<img th:src="@{/thymeleaf.PNG}"/>
+	<hr>
+	
+	
+	
+	<h1>6. form</h1>
+	<!-- th:action="@{경로}" 형태로 작성한다. -->
+	<form th:action="@{toController}">
+		<p>ID : <input type="text" name="id"></p>
+		<p>PASSWORD : <input type="password" name="passwd"></p>
+		<input type="submit">
+	</form>
+	
+</body>
+</html>

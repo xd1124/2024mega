@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>controller to view</title>
+</head>
+<body>
+
+	<h1>단일 데이터</h1>
+	<p th:text="${string}"></p>
+	<p th:text="${int}"></p>
+	<p th:text="${double}"></p>
+	<p th:text="${boolean}"></p>
+	<p th:text="${date}"></p>
+	<hr>
+	
+	<h1>DTO</h1>
+	<p th:text="${dto}"></p>
+	<p th:text="${dto.productId}">
+	<p th:text="${dto.productNm}">
+	<p th:text="${dto.price}">
+	<p th:text="${dto.deliveryPrice}">
+	<p th:text="${dto.enrollDt}">
+	<p th:text="${dto.brandId}">
+	<hr>
+	
+	<h1>DTO List</h1>
+	<p th:text="${dtoList}"></p>
+	<table border="1">
+		<tr th:each="dto : ${dtoList}">
+			<td th:text="${dto.productId}"></td>
+			<td th:text="${dto.productNm}"></td>
+			<td th:text="${dto.price}"></td>
+			<td th:text="${dto.deliveryPrice}"></td>
+			<td th:text="${dto.enrollDt}"></td>
+			<td th:text="${dto.brandId}"></td>
+		</tr>
+	</table>
+	<hr>
+	
+	<h1>Map</h1>
+	<p th:text="${map}"></p>
+	<p th:text="${map.productId}"></p>
+	<p th:text="${map.productNm}"></p>
+	<p th:text="${map.brandId}"></p>
+	<p th:text="${map.price}"></p>
+	<p th:text="${map.deliveryPrice}"></p>
+	<p th:text="${map.enrollDt}"></p>
+	<p th:text="${map.addTax}"></p>
+	<p th:text="${map.totalPrice}"></p>
+	<p th:text="${map.brandNm}"></p>
+	<p th:text="${map.enteredDt}"></p>
+	<p th:text="${map.activeYn}"></p>
+	<hr>
+	
+	<h1>Map List</h1>
+	<p th:text="${mapList}"></p>
+	<table border="1">
+		<tr th:each="map : ${mapList}">
+			<td th:text="${map.productId}"></td>
+			<td th:text="${map.productNm}"></td>
+			<td th:text="${map.brandId}"></td>
+			<td th:text="${map.price}"></td>
+			<td th:text="${map.deliveryPrice}"></td>
+			<td th:text="${map.enrollDt}"></td>
+			<td th:text="${map.addTax}"></td>
+			<td th:text="${map.totalPrice}"></td>
+			<td th:text="${map.brandNm}"></td>
+			<td th:text="${map.enteredDt}"></td>
+			<td th:text="${map.activeYn}"></td>
+		</tr>
+	</table>
+</body>
+</html>
