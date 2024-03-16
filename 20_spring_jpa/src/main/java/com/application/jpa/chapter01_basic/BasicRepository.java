@@ -27,5 +27,5 @@ import com.application.jpa.entity.Brand;
 
 @Repository
 public interface BasicRepository extends JpaRepository<Brand, Long>{
-
+	// github 연동 테스트
 }
